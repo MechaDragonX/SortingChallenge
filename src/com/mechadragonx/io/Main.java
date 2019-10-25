@@ -9,11 +9,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.nio.file.Files.newBufferedReader;
-
 public class Main
 {
-    private static final int[] POWERS_OF_10 = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000 };
+    private static final int[] POWERS_OF_10 = { 1, 10, 100, 1000, 10000, 100000 };
 
     public static void main(String[] args) throws IOException
     {
