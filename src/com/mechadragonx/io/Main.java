@@ -1,6 +1,7 @@
 package com.mechadragonx.io;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
@@ -10,31 +11,43 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main
 {
     private static ArrayList<Integer> result = new ArrayList<>();
     private static final int[] POWERS_OF_10 = { 1, 10, 100, 1000, 10000, 100000 };
 
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) throws Exception
     {
+        // Read data as bytes
         long start = System.currentTimeMillis();
-        int[] input = read("./data/random.txt");
+        int[] input = read("./data/random.txt", 10000000);
         long end = System.currentTimeMillis();
+        // double read = (double)((end - start) / 1000000);
         System.out.println("Read: "+ (end - start));
+        // printCollection(input);
 
+        // Sort data
         start = System.currentTimeMillis();
         mergeSort(input);
         end = System.currentTimeMillis();
-        System.out.println("Sort: " + (end - start));
+        // double sort = (double)((end - start) / 1000000);
+        System.out.println("\nSort: " + (end - start));
+        // printCollection(result);
+
+        // Validate data
+        int[] scanner = readScanner("./data/random.txt", 10000000);
+        compare(input, scanner);
     }
-    private static int[] read(String path) throws IOException
+    private static int[] read(String path, int count) throws IOException
     {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
-        ArrayList<Integer> list = new ArrayList<>();
+        int[] numbers = new int[count];
         int start = 0;
         int end;
         int num = 0;
+        int finalIndex = 0;
         for(int i = 0; i < bytes.length; i++)
         {
             if((bytes[i] == 13 && bytes[i + 1] == 10) || (i == bytes.length - 1))
@@ -45,18 +58,14 @@ public class Main
                 {
                     num += ((bytes[j] - 48) * powerOfTen(end - j));
                 }
-                list.add(num);
+                numbers[finalIndex] = num;
+                finalIndex++;
                 num = 0;
                 start = i + 2;
                 i++;
             }
         }
-        int[] array = new int[list.size()];
-        for(int i = 0; i < array.length; i++)
-        {
-            array[i] = list.get(i);
-        }
-        return array;
+        return numbers;
     }
     private static void mergeSort(int[] array)
     {
@@ -85,53 +94,53 @@ public class Main
             }
         }
     }
-//    private static void mergeSort(List<Integer> list)
-//    {
-//        if(list.size() <= 1) return;
-//        List<Integer> one = list.subList(0, list.size() / 2);
-//        List<Integer> two = list.subList(list.size() / 2, list.size() - 1);
-//        mergeSort(one);
-//        mergeSort(two);
-//        result.addAll(merge(one, two));
-//    }
-//    private static ArrayList<Integer> merge(List<Integer> one, List<Integer> two)
-//    {
-//        ArrayList<Integer> result = new ArrayList<>();
-//        int size = one.size() + two.size();
-//        int i1 = 0;
-//        int i2 = 0;
-//        for(int i = 0; i < size; i++)
-//        {
-//            if(i2 >= two.size()  ||  (i1 < one.size() && one.get(i1) <= two.get(i2)))
-//            {
-//                result.add(one.get(i1));
-//                i1++;
-//            }
-//            else
-//            {
-//                result.add(two.get(i2));
-//                i2++;
-//            }
-//        }
-//        return result;
-//    }
-
-    private static int powerOfTen(int pow)
+    private static int[] readScanner(String path, int count) throws Exception
     {
-        return POWERS_OF_10[pow];
+        Scanner fileScan = new Scanner(new File(path));
+        String[] lines = new String[count];
+        int i = 0;
+        while(fileScan.hasNextLine())
+        {
+            lines[i] = fileScan.nextLine();
+            i++;
+        }
+        i = 0;
+        int[] numbers = new int[count];
+        for(String line : lines)
+        {
+            numbers[i] = Integer.parseInt(line);
+        }
+        return numbers;
     }
+    private static void compare(int[] custom, int[] scanner)
+    {
+        if(custom.length != scanner.length) System.out.println("o_0 The arrays are not the same length!!");
+        int differences = 0;
+        for(int i = 0; i < custom.length; i++)
+        {
+            if(custom[i] != scanner[i])
+            {
+                differences++;
+            }
+        }
+        if(differences == 0) System.out.println("Test successful!!");
+    }
+
+    private static int powerOfTen(int pow) { return POWERS_OF_10[pow]; }
     private static void printCollection(ArrayList<Integer> list)
     {
         for(int num : list)
         {
-            System.out.print(num + "\t");
+            if(num != list.get(list.size() - 1)) System.out.print(num + ", ");
+            else System.out.println(num);
         }
     }
     private static void printCollection(int[] array)
     {
         for(int num : array)
         {
-            System.out.print(num + "\t");
+            if(num != array[array.length - 1]) System.out.print(num + ", ");
+            else System.out.println(num);
         }
     }
 }
