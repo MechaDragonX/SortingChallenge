@@ -25,9 +25,22 @@ public class Main
     }
     private static long execute() throws IOException
     {
+        String inPath = "./data/random.txt";
+        String outPath = "./data/output.txt";
+        File out = new File(outPath);
+        if(out.exists())
+        {
+            if(out.delete()) System.out.println("The output file was deleted!\n");
+            else
+            {
+                System.out.println("The output file wan't deleted somehow!\nABORT!!");
+                return -1;
+            }
+        }
+
         // Read data as bytes
         long start = System.currentTimeMillis();
-        int[] input = read("./data/random.txt", 10000000);
+        int[] input = read(inPath, 10000000);
         long end = System.currentTimeMillis();
         long read = end - start;
         System.out.println("Read: " + read);
@@ -42,8 +55,7 @@ public class Main
 
         // Write data
         start = System.currentTimeMillis();
-        // Make sure to remove existing file before writing
-        write(output, "./data/output.txt");
+        write(output, outPath);
         end = System.currentTimeMillis();
         long write = end - start;
         System.out.println("Write: " + write);
