@@ -1,6 +1,7 @@
 package com.mechadragonx.io;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -20,26 +21,38 @@ public class Main
 
     public static void main(String[] args) throws Exception
     {
+        execute();
+    }
+    private static long execute() throws IOException
+    {
         // Read data as bytes
         long start = System.currentTimeMillis();
         int[] input = read("./data/random.txt", 10000000);
         long end = System.currentTimeMillis();
-        // double read = (double)((end - start) / 1000000);
-        System.out.println("Read: "+ (end - start));
-        // printCollection(input);
+        long read = end - start;
+        System.out.println("Read: " + read);
 
         // Sort data
+        int[] output = Arrays.copyOf(input, input.length);
         start = System.currentTimeMillis();
-        mergeSort(input);
+        mergeSort(output);
         end = System.currentTimeMillis();
-        // double sort = (double)((end - start) / 1000000);
-        System.out.println("\nSort: " + (end - start));
-        // printCollection(result);
+        long sort = end - start;
+        System.out.println("Sort: " + sort );
 
-        // Validate data
-        int[] scanner = readScanner("./data/random.txt", 10000000);
-        compare(input, scanner);
+        // Write data
+        start = System.currentTimeMillis();
+        // Make sure to remove existing file before writing
+        write(output, "./data/output.txt");
+        end = System.currentTimeMillis();
+        long write = end - start;
+        System.out.println("Write: " + write);
+
+        System.out.println("Total Time: " + (read + sort + write) + "\n");
+
+        return (read + sort + write);
     }
+
     private static int[] read(String path, int count) throws IOException
     {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
@@ -94,6 +107,24 @@ public class Main
             }
         }
     }
+    private static void write(int[] array, String path) throws IOException
+    {
+        BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardCharsets.US_ASCII);
+        for(int num : array)
+        {
+            String line = Integer.toString(num) + "\r\n";
+            try
+            {
+                writer.write(line, 0, line.length());
+            }
+            catch (IOException e)
+            {
+                System.err.format("IOException: %s%n", e);
+            }
+        }
+        writer.close();
+    }
+
     private static int[] readScanner(String path, int count) throws Exception
     {
         Scanner fileScan = new Scanner(new File(path));
