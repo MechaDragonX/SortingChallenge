@@ -19,18 +19,45 @@ public class Main
     private static ArrayList<Integer> result = new ArrayList<>();
     private static final int[] POWERS_OF_10 = { 1, 10, 100, 1000, 10000, 100000 };
 
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args) throws IOException
     {
-        execute();
+        test();
     }
-    private static long execute() throws IOException
+    private static void test() throws IOException
     {
         String inPath = "./data/random.txt";
         String outPath = "./data/output.txt";
+
+        long one = execute(inPath, outPath);
+        long two = execute(inPath, outPath);
+        long three = execute(inPath, outPath);
+        long four = execute(inPath, outPath);
+        long five = execute(inPath, outPath);
+        long six = execute(inPath, outPath);
+        long seven = execute(inPath, outPath);
+        long eight = execute(inPath, outPath);
+        long nine = execute(inPath, outPath);
+        long ten = execute(inPath, outPath);
+        long oneone = execute(inPath, outPath);
+        long onetwo = execute(inPath, outPath);
+        long onethree = execute(inPath, outPath);
+        long onefour = execute(inPath, outPath);
+        long onefive = execute(inPath, outPath);
+        long onesix = execute(inPath, outPath);
+        long oneseven = execute(inPath, outPath);
+        long oneeight = execute(inPath, outPath);
+        long onenine = execute(inPath, outPath);
+        long twenty = execute(inPath, outPath);
+
+        long average = (one + two + three + four + five + six + seven + eight + nine + ten + oneone + onetwo + onethree + onefour + onefive + onesix + oneseven + oneeight + onenine + twenty) / 20;
+        System.out.println("Average Time: " + average + " ms");
+    }
+    private static long execute(String inPath, String outPath) throws IOException
+    {
         File out = new File(outPath);
         if(out.exists())
         {
-            if(out.delete()) System.out.println("The output file was deleted!\n");
+            if(out.delete()) System.out.println("The output file was deleted!");
             else
             {
                 System.out.println("The output file wan't deleted somehow!\nABORT!!");
