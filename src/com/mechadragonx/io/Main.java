@@ -1,22 +1,16 @@
 package com.mechadragonx.io;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 
 public class Main
 {
-    private static ArrayList<Integer> result = new ArrayList<>();
     private static final int[] POWERS_OF_10 = { 1, 10, 100, 1000, 10000, 100000 };
 
     public static void main(String[] args) throws IOException
@@ -149,14 +143,15 @@ public class Main
     private static void write(int[] array, String path) throws IOException
     {
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardCharsets.US_ASCII);
+        String line;
         for(int num : array)
         {
-            String line = Integer.toString(num) + "\r\n";
+            line = Integer.toString(num) + "\r\n";
             try
             {
                 writer.write(line, 0, line.length());
             }
-            catch (IOException e)
+            catch(IOException e)
             {
                 System.err.format("IOException: %s%n", e);
             }
@@ -164,47 +159,7 @@ public class Main
         writer.close();
     }
 
-    private static int[] readScanner(String path, int count) throws Exception
-    {
-        Scanner fileScan = new Scanner(new File(path));
-        String[] lines = new String[count];
-        int i = 0;
-        while(fileScan.hasNextLine())
-        {
-            lines[i] = fileScan.nextLine();
-            i++;
-        }
-        i = 0;
-        int[] numbers = new int[count];
-        for(String line : lines)
-        {
-            numbers[i] = Integer.parseInt(line);
-        }
-        return numbers;
-    }
-    private static void compare(int[] custom, int[] scanner)
-    {
-        if(custom.length != scanner.length) System.out.println("o_0 The arrays are not the same length!!");
-        int differences = 0;
-        for(int i = 0; i < custom.length; i++)
-        {
-            if(custom[i] != scanner[i])
-            {
-                differences++;
-            }
-        }
-        if(differences == 0) System.out.println("Test successful!!");
-    }
-
     private static int powerOfTen(int pow) { return POWERS_OF_10[pow]; }
-    private static void printCollection(ArrayList<Integer> list)
-    {
-        for(int num : list)
-        {
-            if(num != list.get(list.size() - 1)) System.out.print(num + ", ");
-            else System.out.println(num);
-        }
-    }
     private static void printCollection(int[] array)
     {
         for(int num : array)
